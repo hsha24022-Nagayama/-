@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海の郵便局</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="prologue" class="screen">
+        <div class="bubbles"></div>
+        <p class="fade-in-text">深く、静かな場所へ...</p>
+    </div>
+
+    <main id="main-ocean" class="screen hidden">
+        <div class="ambient-waves"></div>
+        
+        <div id="ui-container">
+            <h1>海の郵便局</h1>
+            <div class="input-area">
+                <textarea id="user-thought" placeholder="今の気持ちをそっと置いてください..."></textarea>
+                <button id="send-btn">手紙を待つ</button>
+            </div>
+        </div>
+
+        <div id="fish-delivery-zone"></div>
+
+        <div id="letter-modal" class="hidden">
+            <div class="letter-content">
+                <p id="letter-text"></p>
+                <button id="close-letter">海へ返す</button>
+            </div>
+        </div>
+
+        <button id="collection-btn">図鑑</button>
+<div id="collection-modal" class="hidden">
+    <div class="collection-content">
+        <h2>届いた手紙の記録</h2>
+        <div id="collection-list">
+            </div>
+        <button id="close-collection">閉じる</button>
+    </div>
+</div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
