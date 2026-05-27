@@ -85,29 +85,42 @@ button:hover { background: rgba(125, 249, 255, 0.2); }
 #collection-btn { position: fixed; bottom: 30px; right: 30px; z-index: 150; }
 /* 画面幅が600px以下のとき（スマホ）の設定 */
 @media (max-width: 600px) {
-    /* 1. 送られてくる手紙の文字 */
-    .letter-content {
-        font-size: 0.95rem; /* 少しだけ小さく（1.1 → 0.95） */
-        padding: 25px;      /* 余白も少し削って、文字の入る幅を広げる */
-        line-height: 1.6;   /* 行間を少し詰めてスッキリさせる */
+    /* 1. タイトル（届いた手紙の記録） */
+    .collection-header h2 {
+        font-size: 1rem;       /* ほどよく小さく */
+        letter-spacing: 0.1rem; /* 文字の間隔を少し詰める */
     }
 
-    /* 2. 図鑑の中の文字 */
+    /* 2. 閉じるボタン */
+    #close-collection {
+        font-size: 0.8rem;     /* ボタンの文字を小さく */
+        padding: 5px 15px;     /* ボタン自体も少しコンパクトに */
+        margin-top: 0;         /* ヘッダー内でのズレを防止 */
+    }
+
+    /* 3. 送られてくる手紙（モーダル）の文字 */
+    .letter-content {
+        font-size: 0.9rem;
+        padding: 20px;
+    }
+
+    /* 4. 図鑑の中のカード（記録） */
     .collection-item b {
-        font-size: 0.95rem; /* 自分の悩みのタイトル */
+        font-size: 0.9rem;     /* 「自分の悩み」の文字 */
     }
 
     .collection-item p {
-        font-size: 0.9rem;  /* 返信の本文 */
+        font-size: 0.85rem;    /* 魚からの返信の文字 */
         line-height: 1.5;
     }
-
-    /* 3. 図鑑の余白 */
-    .collection-fullview {
-        padding: 15px;      /* 外側の余白を削って、中身を広く使う */
+    
+    .collection-item small {
+        font-size: 0.7rem;     /* 日付の文字 */
     }
 
-    .collection-item {
-        padding: 15px;      /* カードの中の余白を削る */
+    /* 5. 全体の余白 */
+    .collection-fullview {
+        width: 95%;            /* 左右の隙間をギリギリまで広げる */
+        padding: 15px;
     }
 }
