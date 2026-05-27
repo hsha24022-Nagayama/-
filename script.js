@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const bottleModal = document.getElementById('bottle-modal');
     let letterHistory = [];
 
-    // 演出：4秒後にメインへ
     setTimeout(() => {
         prologue.style.opacity = '0';
         setTimeout(() => {
@@ -18,11 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }, 4000);
 
-    // 手紙を送る
     sendBtn.onclick = () => {
         const val = userThought.value;
         if (!val) return;
-        
         document.getElementById('ui-container').style.opacity = '0.2';
         const fish = document.createElement('div');
         fish.className = 'fish approaching';
@@ -44,19 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
         userThought.value = "";
     };
 
-    // 漂流瓶：12秒に一度流す
+    // 漂流瓶の生成
     setInterval(() => {
         if (mainOcean.classList.contains('hidden')) return;
         const bottle = document.createElement('div');
         bottle.className = 'bottle drifting';
-        bottle.style.top = (Math.random() * 60 + 20) + '%';
-        bottle.title = "何か入っているようです...";
+        
+        // 瓶の中に光の波紋を追加
+        const pulse = document.createElement('div');
+        pulse.className = 'bottle-pulse';
+        bottle.appendChild(pulse);
 
+        bottle.style.top = (Math.random() * 60 + 20) + '%';
         bottle.onclick = (e) => {
             e.stopPropagation();
             const samples = [
                 { t: "明日が来るのが少し怖い", m: "夜の海も、いつか朝の光を連れてきます。大丈夫ですよ。" },
-                { t: "疲れちゃったな", m: "波に身をまかせて、ただ浮いているだけの時間があってもいいんです。" }
+                { t: "疲れちゃったな", m: "波に身をまかせて、ただ浮いているだけの時間があってもいいんです。" },
+                { t: "誰もわかってくれない", m: "深海の生き物たちは、音もなく、でも確かに寄り添い合って生きています。" }
             ];
             const s = samples[Math.floor(Math.random() * samples.length)];
             document.getElementById('bottle-thought').innerText = `「${s.t}」`;
@@ -65,12 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
             bottle.remove();
         };
         document.getElementById('bottle-zone').appendChild(bottle);
-        setTimeout(() => { if(bottle) bottle.remove(); }, 20000);
-    }, 12000);
+        setTimeout(() => { if(bottle) bottle.remove(); }, 25000);
+    }, 15000);
 
     document.getElementById('close-bottle').onclick = () => bottleModal.classList.add('hidden');
 
-    // 図鑑ボタン
     document.getElementById('collection-btn').onclick = () => {
         const list = document.getElementById('collection-list');
         list.innerHTML = letterHistory.length ? '' : '<p style="color:white">まだ手紙は届いていません。</p>';
