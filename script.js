@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bottle-zone').appendChild(bottle);
         setTimeout(() => { if(bottle) bottle.remove(); }, 25000);
 
-        const nextTime = Math.random() * 30000 + 40000; // 40〜70秒おき
+        const nextTime = Math.random() * 10000 + 20000; 
         setTimeout(spawnBottle, nextTime);
     }
 
