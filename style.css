@@ -172,3 +172,58 @@ button:hover {
     font-style: italic;
     margin-bottom: 10px;
 }
+/* 漂流瓶の見た目 */
+.bottle {
+    position: absolute;
+    width: 30px;
+    height: 50px;
+    background: rgba(200, 255, 200, 0.3); /* ガラスっぽい色 */
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 5px 5px 15px 15px;
+    cursor: pointer;
+    z-index: 8;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* 瓶のコルク栓部分 */
+.bottle::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 5px;
+    width: 16px;
+    height: 8px;
+    background: #5d4037;
+    border-radius: 2px;
+}
+
+/* 画面を横切るアニメーション */
+.drifting {
+    animation: drift 20s linear infinite;
+}
+
+@keyframes drift {
+    0% { left: -100px; transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(20px) rotate(10deg); }
+    100% { left: 110%; transform: translateY(0) rotate(20deg); }
+}
+
+.bottle-style {
+    border-color: #aaccff !important;
+    background: rgba(10, 25, 40, 0.95) !important;
+}
+
+.bottle-tag {
+    font-size: 0.7rem;
+    color: #aaccff;
+    border: 1px solid #aaccff;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+}
+
+.old-thought {
+    color: #88aacc;
+    font-size: 0.9rem;
+    font-style: italic;
+}

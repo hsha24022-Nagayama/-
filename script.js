@@ -116,3 +116,49 @@ document.addEventListener('DOMContentLoaded', () => {
         collectionModal.classList.add('hidden');
     });
 });
+// --- script.js の末尾付近、または適切な場所に追加 ---
+
+const bottleZone = document.getElementById('bottle-zone');
+const bottleModal = document.getElementById('bottle-modal');
+const bottleThought = document.getElementById('bottle-thought');
+const bottleMessage = document.getElementById('bottle-message');
+const closeBottle = document.getElementById('close-bottle');
+
+// 他の誰かの悩みと返信のサンプル（本来はサーバーから取得するイメージ）
+const driftSamples = [
+    { thought: "明日が来るのが少し怖いな", message: "夜の海も、月明かりがあれば歩けます。あなたの明日にも、小さな光が差しますように。" },
+    { thought: "自分の居場所がない気がする", message: "海には境界線がありません。どこへ行っても、そこはあなたの海ですよ。" },
+    { thought: "何もできていない自分に焦る", message: "波は寄せては返すだけ。それでも、砂浜を少しずつ形作っています。あなたも、生きているだけで十分です。" }
+];
+
+// 瓶を生成して流す関数
+function spawnBottle() {
+    const bottle = document.createElement('div');
+    bottle.className = 'bottle drifting';
+    bottle.style.top = Math.random() * 60 + 20 + '%'; // 画面中央付近を流す
+    
+    bottle.onclick = () => {
+        const sample = driftSamples[Math.floor(Math.random() * driftSamples.length)];
+        bottleThought.innerText = `「${sample.thought}」`;
+        bottleMessage.innerText = sample.message;
+        bottleModal.classList.remove('hidden');
+        bottleModal.style.opacity = 1;
+        bottle.remove(); // 拾ったら消える
+    };
+
+    bottleZone.appendChild(bottle);
+
+    // 画面外に出たら消す
+    setTimeout(() => { if(bottle) bottle.remove(); }, 25000);
+}
+
+// 30秒に1回、瓶を流すか判定
+setInterval(() => {
+    if (Math.random() > 0.7) { // 30%の確率で流れる
+        spawnBottle();
+    }
+}, 30000);
+
+closeBottle.onclick = () => {
+    bottleModal.classList.add('hidden');
+};
