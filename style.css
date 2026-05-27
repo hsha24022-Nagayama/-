@@ -124,3 +124,8 @@ button:hover { background: rgba(125, 249, 255, 0.2); }
         padding: 15px;
     }
 }
+/* 拾った瓶の記録は、少し違う色（薄い緑など）にする */
+.collection-item.bottle-item {
+    border-left: 4px solid #aaffcc; /* 瓶っぽい色 */
+    background: rgba(170, 255, 204, 0.05);
+}
