@@ -15,25 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
         { symbol: "🌕", name: "真珠の涙" }, { symbol: "🪙", name: "古い銀貨" }
     ];
 
-    // --- 【追加】泡を生成する関数 ---
     function createBubbles() {
-        // 現在の記録数に合わせて泡を出す（1つの記録につき5つの泡）
-        const bubbleCount = letterHistory.length * 5;
-        // 一旦リセット（増えすぎ防止）
+        const bubbleCount = Math.min(letterHistory.length * 5, 100); // 最大100個まで
         bubbleContainer.innerHTML = '';
-        
         for (let i = 0; i < bubbleCount; i++) {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            const size = Math.random() * 10 + 5 + 'px';
-            bubble.style.width = size;
-            bubble.style.height = size;
-            bubble.style.left = Math.random() * 100 + '%';
-            bubble.style.setProperty('--t', (Math.random() * 5 + 5) + 's'); // 上昇速度
-            bubble.style.setProperty('--o', Math.random() * 0.5 + 0.1); // 透明度
-            bubble.style.animationDelay = Math.random() * 5 + 's';
-            bubbleContainer.appendChild(bubble);
+            addSingleBubble();
         }
+    }
+
+    function addSingleBubble() {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = Math.random() * 10 + 5 + 'px';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + '%';
+        bubble.style.setProperty('--t', (Math.random() * 5 + 5) + 's');
+        bubble.style.setProperty('--o', Math.random() * 0.5 + 0.1);
+        bubble.style.animationDelay = Math.random() * 5 + 's';
+        bubbleContainer.appendChild(bubble);
     }
 
     setTimeout(() => {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prologue.classList.add('hidden');
             mainOcean.classList.remove('hidden');
             mainOcean.style.opacity = '1';
-            createBubbles(); // 初期表示
+            createBubbles();
         }, 1000);
     }, 4000);
 
@@ -63,15 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
             letterModal.classList.remove('hidden');
             
             letterHistory.push({ type: 'mine', date: new Date().toLocaleString(), thought: val, message: msg, treasure: getTreasure.symbol });
-            createBubbles(); // 記録が増えたので泡を増やす
             fish.remove();
         }, 5000);
     };
 
-    document.getElementById('close-letter').onclick = () => {
-        letterModal.classList.add('hidden');
-        document.getElementById('ui-container').style.opacity = '1';
-        userThought.value = "";
+    // --- 【修正】「海へ返す」溶けるアニメーション ---
+    document.getElementById('close-letter').onclick = function() {
+        const content = this.parentElement;
+        content.classList.add('dissolve-animation');
+
+        // アニメーション中に泡をたくさん出す
+        for(let i=0; i<15; i++) {
+            setTimeout(addSingleBubble, i * 100);
+        }
+
+        setTimeout(() => {
+            letterModal.classList.add('hidden');
+            content.classList.remove('dissolve-animation'); // クラスをリセット
+            document.getElementById('ui-container').style.opacity = '1';
+            userThought.value = "";
+            createBubbles(); // 記録確定後に泡を再計算
+        }, 2000);
     };
 
     function spawnBottle() {
@@ -96,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             bottleModal.classList.remove('hidden');
 
             letterHistory.push({ type: 'bottle', date: new Date().toLocaleString(), thought: s.t, message: s.m, treasure: "🌊" });
-            createBubbles(); // 泡を増やす
             bottle.remove();
         };
         document.getElementById('bottle-zone').appendChild(bottle);
@@ -106,7 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setTimeout(spawnBottle, 20000);
 
-    document.getElementById('close-bottle').onclick = () => bottleModal.classList.add('hidden');
+    // 漂流瓶を流す時は、サッと閉じる（他者の言葉なので）
+    document.getElementById('close-bottle').onclick = () => {
+        bottleModal.classList.add('hidden');
+        createBubbles();
+    };
 
     document.getElementById('collection-btn').onclick = () => {
         const list = document.getElementById('collection-list');
