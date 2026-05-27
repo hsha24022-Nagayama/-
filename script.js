@@ -41,17 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         userThought.value = "";
     };
 
-    // 漂流瓶の生成
     setInterval(() => {
         if (mainOcean.classList.contains('hidden')) return;
         const bottle = document.createElement('div');
         bottle.className = 'bottle drifting';
-        
-        // 瓶の中に光の波紋を追加
         const pulse = document.createElement('div');
         pulse.className = 'bottle-pulse';
         bottle.appendChild(pulse);
-
         bottle.style.top = (Math.random() * 60 + 20) + '%';
         bottle.onclick = (e) => {
             e.stopPropagation();
@@ -74,11 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('collection-btn').onclick = () => {
         const list = document.getElementById('collection-list');
-        list.innerHTML = letterHistory.length ? '' : '<p style="color:white">まだ手紙は届いていません。</p>';
+        list.innerHTML = letterHistory.length ? '' : '<p style="text-align:center; margin-top:50px;">まだ手紙は届いていません。</p>';
         letterHistory.forEach(item => {
             const d = document.createElement('div');
             d.className = 'collection-item';
-            d.innerHTML = `<small>${item.date}</small><br><b>「${item.thought}」</b>への返信<br>${item.message}`;
+            d.innerHTML = `
+                <small>${item.date}</small>
+                <b>「${item.thought}」</b>
+                <p>${item.message}</p>
+            `;
             list.appendChild(d);
         });
         collectionModal.classList.remove('hidden');
