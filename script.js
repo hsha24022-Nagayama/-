@@ -6,17 +6,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const letterModal = document.getElementById('letter-modal');
     const collectionModal = document.getElementById('collection-modal');
     const bottleModal = document.getElementById('bottle-modal');
+    const bubbleContainer = document.getElementById('bubble-container');
     let letterHistory = [];
 
-    // 宝物リスト
     const treasures = [
-        { symbol: "🐚", name: "ささやき貝" },
-        { symbol: "✨", name: "星の砂" },
-        { symbol: "💎", name: "瑠璃色の石" },
-        { symbol: "🪸", name: "黄金のサンゴ" },
-        { symbol: "🌕", name: "真珠の涙" },
-        { symbol: "🪙", name: "古い銀貨" }
+        { symbol: "🐚", name: "ささやき貝" }, { symbol: "✨", name: "星の砂" },
+        { symbol: "💎", name: "瑠璃色の石" }, { symbol: "🪸", name: "黄金のサンゴ" },
+        { symbol: "🌕", name: "真珠の涙" }, { symbol: "🪙", name: "古い銀貨" }
     ];
+
+    // --- 【追加】泡を生成する関数 ---
+    function createBubbles() {
+        // 現在の記録数に合わせて泡を出す（1つの記録につき5つの泡）
+        const bubbleCount = letterHistory.length * 5;
+        // 一旦リセット（増えすぎ防止）
+        bubbleContainer.innerHTML = '';
+        
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 10 + 5 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.setProperty('--t', (Math.random() * 5 + 5) + 's'); // 上昇速度
+            bubble.style.setProperty('--o', Math.random() * 0.5 + 0.1); // 透明度
+            bubble.style.animationDelay = Math.random() * 5 + 's';
+            bubbleContainer.appendChild(bubble);
+        }
+    }
 
     setTimeout(() => {
         prologue.style.opacity = '0';
@@ -24,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prologue.classList.add('hidden');
             mainOcean.classList.remove('hidden');
             mainOcean.style.opacity = '1';
+            createBubbles(); // 初期表示
         }, 1000);
     }, 4000);
 
@@ -38,21 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             const msg = val.includes("消えたい") ? "よくここまで潜ってきてくれましたね。あなたは独りではありませんよ。" : "深海の静寂は、あなたを優しく包む毛布のようなものです。今はゆっくり休んで。";
-            
-            // 宝物を抽選
             const getTreasure = treasures[Math.floor(Math.random() * treasures.length)];
-            
             document.getElementById('treasure-disp').innerHTML = `${getTreasure.symbol}<br><small style="font-size:0.8rem">贈り物：${getTreasure.name}</small>`;
             document.getElementById('letter-text').innerText = msg;
             letterModal.classList.remove('hidden');
             
-            letterHistory.push({ 
-                type: 'mine',
-                date: new Date().toLocaleString(), 
-                thought: val, 
-                message: msg,
-                treasure: getTreasure.symbol
-            });
+            letterHistory.push({ type: 'mine', date: new Date().toLocaleString(), thought: val, message: msg, treasure: getTreasure.symbol });
+            createBubbles(); // 記録が増えたので泡を増やす
             fish.remove();
         }, 5000);
     };
@@ -64,10 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function spawnBottle() {
-        if (mainOcean.classList.contains('hidden')) {
-            setTimeout(spawnBottle, 10000);
-            return;
-        }
+        if (mainOcean.classList.contains('hidden')) { setTimeout(spawnBottle, 10000); return; }
         const bottle = document.createElement('div');
         bottle.className = 'bottle drifting';
         const pulse = document.createElement('div');
@@ -87,13 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('bottle-message').innerText = s.m;
             bottleModal.classList.remove('hidden');
 
-            letterHistory.push({ 
-                type: 'bottle',
-                date: new Date().toLocaleString(), 
-                thought: s.t, 
-                message: s.m,
-                treasure: "🌊" 
-            });
+            letterHistory.push({ type: 'bottle', date: new Date().toLocaleString(), thought: s.t, message: s.m, treasure: "🌊" });
+            createBubbles(); // 泡を増やす
             bottle.remove();
         };
         document.getElementById('bottle-zone').appendChild(bottle);
@@ -108,19 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('collection-btn').onclick = () => {
         const list = document.getElementById('collection-list');
         list.innerHTML = letterHistory.length ? '' : '<p style="text-align:center; margin-top:50px;">まだ手紙は届いていません。</p>';
-        
         letterHistory.forEach(item => {
             const d = document.createElement('div');
             d.className = item.type === 'bottle' ? 'collection-item bottle-item' : 'collection-item';
             const label = item.type === 'bottle' ? '<small>海からの拾いもの</small>' : `<small>${item.date}</small>`;
             const treasureTag = item.treasure ? `<div class="item-treasure">${item.treasure}</div>` : '';
-            
-            d.innerHTML = `
-                ${treasureTag}
-                ${label}
-                <b>「${item.thought}」</b>
-                <p>${item.message}</p>
-            `;
+            d.innerHTML = `${treasureTag}${label}<b>「${item.thought}」</b><p>${item.message}</p>`;
             list.appendChild(d);
         });
         collectionModal.classList.remove('hidden');
