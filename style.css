@@ -6,10 +6,7 @@
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    margin: 0; padding: 0; width: 100%; height: 100%;
     background-color: var(--deep-blue);
     color: var(--text-color);
     font-family: 'serif';
@@ -17,213 +14,40 @@ body, html {
 }
 
 .screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     transition: opacity 2s ease;
 }
 
-.hidden {
-    display: none !important;
-    opacity: 0;
-}
+.hidden { display: none !important; }
 
 /* 導入演出 */
-#prologue {
-    background: linear-gradient(to bottom, #001a33, #000510);
-}
-
-.fade-in-text {
-    animation: fadeInOut 4s forwards;
-    font-size: 1.2rem;
-    letter-spacing: 0.2rem;
-}
+#prologue { background: linear-gradient(to bottom, #001a33, #000510); }
+.fade-in-text { animation: fadeInOut 4s forwards; font-size: 1.2rem; letter-spacing: 0.2rem; }
 
 /* メイン画面 */
-#main-ocean {
-    background: radial-gradient(circle at center, #00152a 0%, #000510 100%);
-}
+#main-ocean { background: radial-gradient(circle at center, #00152a 0%, #000510 100%); position: relative; }
+#ui-container { z-index: 10; text-align: center; width: 80%; max-width: 500px; }
+textarea { width: 100%; height: 100px; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--ocean-light); color: white; padding: 10px; border-radius: 8px; resize: none; outline: none; }
+button { margin-top: 20px; background: transparent; border: 1px solid var(--fish-glow); color: var(--fish-glow); padding: 10px 30px; cursor: pointer; border-radius: 20px; transition: 0.3s; }
+button:hover { background: rgba(125, 249, 255, 0.2); }
 
-#ui-container {
-    z-index: 10;
-    text-align: center;
-    width: 80%;
-    max-width: 500px;
-}
+/* モーダル共通 */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; transition: opacity 0.5s; }
+.letter-content, .collection-content { background: rgba(20, 40, 60, 0.95); padding: 30px; border: 1px solid var(--fish-glow); border-radius: 15px; max-width: 80%; line-height: 1.8; text-align: center; }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--ocean-light);
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    resize: none;
-    outline: none;
-}
+/* 魚と瓶 */
+.fish { position: absolute; width: 50px; height: 25px; background: var(--fish-glow); border-radius: 50%; box-shadow: 0 0 20px var(--fish-glow); filter: blur(2px); pointer-events: none; }
+.approaching { animation: approachFish 5s ease-out forwards; }
 
-button {
-    margin-top: 20px;
-    background: transparent;
-    border: 1px solid var(--fish-glow);
-    color: var(--fish-glow);
-    padding: 10px 30px;
-    cursor: pointer;
-    border-radius: 20px;
-    transition: 0.3s;
-}
+.bottle { position: absolute; width: 25px; height: 40px; background: rgba(200, 255, 200, 0.2); border: 1px solid white; border-radius: 4px 4px 10px 10px; cursor: pointer; z-index: 50; }
+.drifting { animation: drift 15s linear forwards; }
 
-button:hover {
-    background: rgba(125, 249, 255, 0.2);
-}
+@keyframes fadeInOut { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes approachFish { 0% { transform: scale(0.1) translate(-500%, -200%); opacity: 0; } 100% { transform: scale(1) translate(-50%, -50%); opacity: 1; } }
+@keyframes drift { 0% { left: -50px; transform: rotate(0deg); } 100% { left: 110%; transform: rotate(360deg); } }
 
-/* 魚のアニメーション */
-.fish {
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    background: var(--fish-glow);
-    border-radius: 50% 50% 50% 50%;
-    box-shadow: 0 0 20px var(--fish-glow);
-    filter: blur(2px);
-    pointer-events: none;
-}
-
-.approaching {
-    animation: approachFish 5s ease-out forwards;
-}
-
-/* 手紙のモーダル */
-#letter-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.letter-content {
-    background: rgba(20, 40, 60, 0.9);
-    padding: 40px;
-    border: 1px solid var(--fish-glow);
-    border-radius: 10px;
-    max-width: 80%;
-    line-height: 1.8;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-@keyframes approachFish {
-    0% { transform: scale(0.1) translate(-500%, -200%); opacity: 0; }
-    100% { transform: scale(1) translate(0, 0); opacity: 1; }
-}
-/* 図鑑モーダル */
-#collection-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 10, 0.95);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
-}
-
-.collection-content {
-    background: #001a33;
-    padding: 30px;
-    border: 1px solid var(--ocean-light);
-    border-radius: 15px;
-    width: 80%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.collection-item {
-    border-bottom: 1px solid rgba(125, 249, 255, 0.2);
-    padding: 15px 0;
-}
-
-.collection-date {
-    font-size: 0.8rem;
-    color: var(--fish-glow);
-    margin-bottom: 5px;
-}
-
-.collection-thought {
-    font-size: 0.9rem;
-    color: #88aacc;
-    font-style: italic;
-    margin-bottom: 10px;
-}
-/* 漂流瓶の見た目 */
-.bottle {
-    position: absolute;
-    width: 30px;
-    height: 50px;
-    background: rgba(200, 255, 200, 0.3); /* ガラスっぽい色 */
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 5px 5px 15px 15px;
-    cursor: pointer;
-    z-index: 8;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-/* 瓶のコルク栓部分 */
-.bottle::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 5px;
-    width: 16px;
-    height: 8px;
-    background: #5d4037;
-    border-radius: 2px;
-}
-
-/* 画面を横切るアニメーション */
-.drifting {
-    animation: drift 20s linear infinite;
-}
-
-@keyframes drift {
-    0% { left: -100px; transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(20px) rotate(10deg); }
-    100% { left: 110%; transform: translateY(0) rotate(20deg); }
-}
-
-.bottle-style {
-    border-color: #aaccff !important;
-    background: rgba(10, 25, 40, 0.95) !important;
-}
-
-.bottle-tag {
-    font-size: 0.7rem;
-    color: #aaccff;
-    border: 1px solid #aaccff;
-    display: inline-block;
-    padding: 2px 8px;
-    margin-bottom: 10px;
-}
-
-.old-thought {
-    color: #88aacc;
-    font-size: 0.9rem;
-    font-style: italic;
-}
+/* 図鑑用 */
+#collection-btn { position: fixed; bottom: 20px; right: 20px; z-index: 10; }
+.collection-item { border-bottom: 1px solid rgba(125, 249, 255, 0.2); padding: 15px 0; text-align: left; }
