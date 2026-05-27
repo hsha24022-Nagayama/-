@@ -83,3 +83,31 @@ button:hover { background: rgba(125, 249, 255, 0.2); }
 @keyframes drift { 0% { left: -60px; transform: rotate(-5deg); } 100% { left: 110%; transform: rotate(15deg); } }
 
 #collection-btn { position: fixed; bottom: 30px; right: 30px; z-index: 150; }
+/* 画面幅が600px以下のとき（スマホ）の設定 */
+@media (max-width: 600px) {
+    /* 1. 送られてくる手紙の文字 */
+    .letter-content {
+        font-size: 0.95rem; /* 少しだけ小さく（1.1 → 0.95） */
+        padding: 25px;      /* 余白も少し削って、文字の入る幅を広げる */
+        line-height: 1.6;   /* 行間を少し詰めてスッキリさせる */
+    }
+
+    /* 2. 図鑑の中の文字 */
+    .collection-item b {
+        font-size: 0.95rem; /* 自分の悩みのタイトル */
+    }
+
+    .collection-item p {
+        font-size: 0.9rem;  /* 返信の本文 */
+        line-height: 1.5;
+    }
+
+    /* 3. 図鑑の余白 */
+    .collection-fullview {
+        padding: 15px;      /* 外側の余白を削って、中身を広く使う */
+    }
+
+    .collection-item {
+        padding: 15px;      /* カードの中の余白を削る */
+    }
+}
