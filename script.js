@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 要素の取得
     const prologue = document.getElementById('prologue');
     const mainOcean = document.getElementById('main-ocean');
     const sendBtn = document.getElementById('send-btn');
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let letterHistory = [];
 
-    // 1. 導入演出 (4秒)
+    // 1. 導入演出
     setTimeout(() => {
         prologue.style.opacity = '0';
         setTimeout(() => {
@@ -23,20 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }, 4000);
 
-    // 2. メッセージデータ
     const normalMessages = [
-        "深海の暗闇は、星空に似ています。あなたの孤独も、誰かにとっては光に見えるはず。",
-        "水圧は、あなたを潰すものではなく、包み込む優しさだと思って。今はゆっくり休んで。",
-        "クラゲは流れに身をまかせて生きています。あらがわない強さも、一つの勇気です。"
+        "深海の暗闇は、星空に似ています。あなたの孤独も、光に見えるはず。",
+        "水圧は、包み込む優しさだと思って。今はゆっくり休んで。",
+        "クラゲは流れに身をまかせて生きています。あらがわない強さもあります。"
     ];
 
     const driftSamples = [
         { thought: "明日が少し怖いな", message: "夜の海も、月明かりがあれば歩けます。小さな光を信じて。" },
-        { thought: "居場所がない気がする", message: "海には境界線がありません。どこへ行っても、そこはあなたの海です。" }
+        { thought: "居場所がない気がする", message: "海には境界線がありません。どこへ行っても、そこはあなたの海です。" },
+        { thought: "疲れたなあ", message: "波の音を聴きながら、今はただ、ぷかぷか浮いていてください。" }
     ];
 
     // 3. 手紙を送る
-    sendBtn.onclick = () => {
+    sendBtn.addEventListener('click', () => {
         const thought = userThought.value;
         if (!thought) return;
 
@@ -54,16 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
             letterHistory.push({ date: new Date().toLocaleString(), thought: thought, message: msg });
             fish.remove();
         }, 5000);
-    };
+    });
 
-    // 4. モーダルを閉じる
-    document.getElementById('close-letter').onclick = () => {
+    document.getElementById('close-letter').addEventListener('click', () => {
         letterModal.classList.add('hidden');
         document.getElementById('ui-container').style.opacity = '1';
         userThought.value = "";
-    };
+    });
 
-    // 5. 漂流瓶を流す (15秒に1回判定)
+    // 5. 漂流瓶を流す (10秒に1回出現)
     setInterval(() => {
         if (mainOcean.classList.contains('hidden')) return;
         
@@ -71,31 +69,39 @@ document.addEventListener('DOMContentLoaded', () => {
         bottle.className = 'bottle drifting';
         bottle.style.top = (Math.random() * 60 + 20) + '%';
         
-        bottle.onclick = () => {
+        // 瓶をクリックした時の処理
+        bottle.addEventListener('click', (e) => {
+            e.stopPropagation(); // 他のクリック判定を邪魔しない
             const s = driftSamples[Math.floor(Math.random() * driftSamples.length)];
             document.getElementById('bottle-thought').innerText = `「${s.thought}」`;
             document.getElementById('bottle-message').innerText = s.message;
             bottleModal.classList.remove('hidden');
             bottleModal.style.opacity = '1';
             bottle.remove();
-        };
+        });
+
         document.getElementById('bottle-zone').appendChild(bottle);
-        setTimeout(() => bottle.remove(), 15000);
-    }, 15000);
+        setTimeout(() => { if(bottle) bottle.remove(); }, 20000);
+    }, 10000);
 
-    document.getElementById('close-bottle').onclick = () => bottleModal.classList.add('hidden');
+    document.getElementById('close-bottle').addEventListener('click', () => {
+        bottleModal.classList.add('hidden');
+    });
 
-    // 6. 図鑑
-    document.getElementById('collection-btn').onclick = () => {
-        collectionList.innerHTML = letterHistory.length ? '' : '<p>まだ手紙はありません。</p>';
+    // 6. 図鑑を開く
+    document.getElementById('collection-btn').addEventListener('click', () => {
+        collectionList.innerHTML = letterHistory.length ? '' : '<p style="color:white;">まだ手紙はありません。</p>';
         letterHistory.forEach(item => {
             const div = document.createElement('div');
             div.className = 'collection-item';
-            div.innerHTML = `<small>${item.date}</small><br><b>「${item.thought}」</b><br>${item.message}`;
+            div.innerHTML = `<small>${item.date}</small><br><b>「${item.thought}」</b>への返信<br>${item.message}`;
             collectionList.appendChild(div);
         });
         collectionModal.classList.remove('hidden');
         collectionModal.style.opacity = '1';
-    };
-    document.getElementById('close-collection').onclick = () => collectionModal.classList.add('hidden');
+    });
+
+    document.getElementById('close-collection').addEventListener('click', () => {
+        collectionModal.classList.add('hidden');
+    });
 });
