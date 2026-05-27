@@ -154,10 +154,10 @@ function spawnBottle() {
 
 // 30秒に1回、瓶を流すか判定
 setInterval(() => {
-    if (Math.random() > 0.7) { // 30%の確率で流れる
+    if (Math.random() > 0.6) { // 30%の確率で流れる
         spawnBottle();
     }
-}, 30000);
+}, 10000);
 
 closeBottle.onclick = () => {
     bottleModal.classList.add('hidden');
